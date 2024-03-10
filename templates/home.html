@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        font-family: 'Open Sans', sans-serif;
+      }
+    </style>
+  </head>
+  <body class="bg-gradient-to-r from-slate-900 to-slate-600">
+    <div class="m-6 bg-white p-6 rounded-lg">
+      <h1 class="text-3xl">LLM-based Tweet Generator</h1>
+      <br />
+      <div class="form">
+        <h2 class="text-lg">Step 1: Paste your Twitter Profile URL</h2>
+        <div class="w-96 inline-block mt-2">
+          <div class="relative w-full min-w-[200px] h-10">
+            <input name="tw_url" class="peer w-full h-full bg-transparent text-blue-gray-700 font-sans font-normal outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 border focus:border-2 border-t-blue-gray-200 focus:border-t-transparent text-sm px-3 py-2.5 rounded-[7px] !pr-9 border-blue-gray-200 focus:border-gray-900" placeholder=" " /><label class="flex w-full h-full select-none pointer-events-none absolute left-0 font-normal !overflow-visible truncate peer-placeholder-shown:text-blue-gray-500 leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500 transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] before:content[' '] before:block before:box-border before:w-2.5 before:h-1.5 before:mt-[6.5px] before:mr-1 peer-placeholder-shown:before:border-transparent before:rounded-tl-md before:border-t peer-focus:before:border-t-2 before:border-l peer-focus:before:border-l-2 before:pointer-events-none before:transition-all peer-disabled:before:border-transparent after:content[' '] after:block after:flex-grow after:box-border after:w-2.5 after:h-1.5 after:mt-[6.5px] after:ml-1 peer-placeholder-shown:after:border-transparent after:rounded-tr-md after:border-t peer-focus:after:border-t-2 after:border-r peer-focus:after:border-r-2 after:pointer-events-none after:transition-all peer-disabled:after:border-transparent peer-placeholder-shown:leading-[3.75] text-gray-500 peer-focus:text-gray-900 before:border-blue-gray-200 peer-focus:before:!border-gray-900 after:border-blue-gray-200 peer-focus:after:!border-gray-900">Paste Twitter Profile</label>
+          </div>
+        </div>
+        <button id="fetch-interests" class="bg-stone-500 hover:bg-stone-400 text-white font-bold py-2 px-4 border-b-4 border-stone-700 hover:border-stone-500 rounded button inline-block">Fetch Interests</button>
+      </div>
+      <br />
+      <div class="form hidden" id="interests">
+        <h2 class="text-lg">Step 2: Pick your Interest</h2>
+        <ul id="interests-container" class="items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex mt-2">
+        </ul>
+      </div>
+
+      <br />
+      <div class="form hidden" id="interest-input">
+        <h2 class="text-lg">Step 3: Type your Interest</h2>
+        <div class="w-96 inline-block mt-2">
+          <div class="relative w-full min-w-[200px] h-10">
+            <input name="interest-input" class="peer w-full h-full bg-transparent text-blue-gray-700 font-sans font-normal outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 border focus:border-2 border-t-blue-gray-200 focus:border-t-transparent text-sm px-3 py-2.5 rounded-[7px] !pr-9 border-blue-gray-200 focus:border-gray-900" placeholder=" " /><label class="flex w-full h-full select-none pointer-events-none absolute left-0 font-normal !overflow-visible truncate peer-placeholder-shown:text-blue-gray-500 leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500 transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] before:content[' '] before:block before:box-border before:w-2.5 before:h-1.5 before:mt-[6.5px] before:mr-1 peer-placeholder-shown:before:border-transparent before:rounded-tl-md before:border-t peer-focus:before:border-t-2 before:border-l peer-focus:before:border-l-2 before:pointer-events-none before:transition-all peer-disabled:before:border-transparent after:content[' '] after:block after:flex-grow after:box-border after:w-2.5 after:h-1.5 after:mt-[6.5px] after:ml-1 peer-placeholder-shown:after:border-transparent after:rounded-tr-md after:border-t peer-focus:after:border-t-2 after:border-r peer-focus:after:border-r-2 after:pointer-events-none after:transition-all peer-disabled:after:border-transparent peer-placeholder-shown:leading-[3.75] text-gray-500 peer-focus:text-gray-900 before:border-blue-gray-200 peer-focus:before:!border-gray-900 after:border-blue-gray-200 peer-focus:after:!border-gray-900">Type your interest</label>
+          </div>
+        </div>
+        <button id="generate-tweet" class="bg-stone-500 hover:bg-stone-400 text-white font-bold py-2 px-4 border-b-4 border-stone-700 hover:border-stone-500 rounded button inline-block">Generate Tweet</button>
+      </div>
+
+      </div>
+    </div>
+
+    <div class="m-6 bg-white p-6 rounded-lg hidden" id="response-container">
+        <h1 class="text-3xl">Generated Tweet :</h1>
+        <br />
+        <div id="response"></div>
+    </div>
+  </body>
+  <script>
+    $(document).ready(function () {
+      // Function to make AJAX request to the JSON API
+      $("#fetch-interests").click(function() {
+        $.ajax({
+            url: '/interests?url=' + $("input[name='tw_url']").val(),
+            method: 'GET',
+            dataType: 'json',
+            success: function (response) {
+                $('#interests').removeClass('hidden')
+                $('#interest-input').removeClass('hidden')
+                // --
+                // Iterate over the list of strings in the JSON response
+                //response.data.forEach(function(interest) {
+                //    // Add a new <li> element for each string
+                //    $("<li>").text(interest).appendTo("#interests-container");
+                //});
+                response.data.forEach(function(interest) {
+                    // Create a new <li> element with the specified structure for each string
+                    var listItemHTML = `
+                        <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r">
+                            <div class="flex items-center ps-3">
+                            <input id="${interest}" type="radio" value="${interest}" name="list-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500" />
+                            <label for="${interest}" class="w-full py-3 ms-2 text-sm font-medium text-gray-900">${interest}</label>
+                            </div>
+                        </li>
+                    `;
+                    // Append the HTML structure to the UL element
+                    $("#interests-container").append(listItemHTML);
+                });
+
+            },
+            error: function (xhr, status, error) {
+            // Handle error if needed
+            console.error('Error:', error)
+            }
+        })
+      })
+
+
+      // -----
+      $("#generate-tweet").click(function() {
+        var tw_url = $("input[name='tw_url']").val()
+        var interest = $("input:radio[name ='list-radio']:checked").val()
+        var interest_input = $("input[name='interest-input']").val()
+        var url = `/generate?url=${tw_url}&interest=${interest}&interest_input=${interest_input}`
+        $.ajax({
+            url: url,
+            method: 'GET',
+            dataType: 'json',
+            success: function (response) {
+                $('#response-container').removeClass('hidden');
+                $('#response').text(response.data);
+            },
+            error: function (xhr, status, error) {
+            // Handle error if needed
+            console.error('Error:', error)
+            }
+        })
+      })
+    })
+  </script>
+</html>
