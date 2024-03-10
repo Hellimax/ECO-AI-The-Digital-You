@@ -3,7 +3,7 @@
 
 Steps to run the code:
 
-Step 1: Setup a virtual enviroment in python \n
+Step 1: Setup a virtual enviroment in python <br />
 Step 2: Activate the virtual enviroment
 Step 3: Clone the github repo using command "git clone https://github.com/Hellimax/ECO-AI-The-Digital-You.git"
 Step 4: Change working directoy using command "cd ECO-AI-The-Digital-You"
