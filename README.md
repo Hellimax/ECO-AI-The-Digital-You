@@ -1,5 +1,9 @@
 # ECO-AI-The-Digital-You
 
+## Overview
+LLM Based Tweet Generator is a Python Django web application that allows users to generate tweets in the style of any given Twitter profile. By providing the link to a Twitter profile and a topic, users can receive a generated tweet that mimics the writing style of the specified profile. This application leverages natural language processing techniques to analyze and replicate the unique tweeting style of users.
+
+
 
 Steps to run the code:
 
